@@ -21,17 +21,16 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text = update.message.text
         name, relation = [s.strip() for s in text.split(",", 1)]
         prompt = f"Придумай короткое поздравление с днём рождения для {name}. Этот человек — {relation}. Стиль: тёплый, дружеский, без пафоса. Не более 3 предложений."
-response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=[{"role": "user", "content": prompt}],
-    temperature=0.9,
-    max_tokens=100
-)
-message = response["choices"][0]["message"]["content"]
-await update.message.reply_text(f"Вот поздравление для {name}:\n\n{message}")
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.9,
+            max_tokens=100
+        )
+        message = response["choices"][0]["message"]["content"]
+        await update.message.reply_text(f"Вот поздравление для {name}:\n\n{message}")
 
-
-{message}")
     except:
         await update.message.reply_text("Пожалуйста, отправь в формате: Имя, кто он тебе. Пример: Алексей, брат")
 
