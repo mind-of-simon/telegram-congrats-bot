@@ -5,17 +5,21 @@ from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, Messa
 import openai
 from dotenv import load_dotenv
 
+# Загружаем токены из .env
 load_dotenv()
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 openai.api_key = OPENAI_API_KEY
 
+# Включаем логирование
 logging.basicConfig(level=logging.INFO)
 
+# Обработка команды /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Привет! Напиши имя и кто этот человек (пример: Маша, подруга)")
 
+# Обработка любого текста
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         text = update.message.text
@@ -29,12 +33,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             max_tokens=100
         )
         message = response["choices"][0]["message"]["content"]
-        await update.message.reply_text(f"Вот поздравление для {name}:
-
-{message}")
+        await update.message.reply_text(f"Вот поздравление для {name}:\n\n{message}")
     except:
         await update.message.reply_text("Пожалуйста, отправь в формате: Имя, кто он тебе. Пример: Алексей, брат")
 
+# Основной запуск
 def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
