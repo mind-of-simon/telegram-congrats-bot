@@ -28,7 +28,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             max_tokens=100
         )
         message = response["choices"][0]["message"]["content"]
-        await update.message.reply_text(f"Вот поздравление для {name}:
+await update.message.reply_text(f"Вот поздравление для {name}:\n\n{message}")
 
 {message}")
     except:
